@@ -18,6 +18,9 @@ export class AppComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
   totalPagesArray: number[] = [];
+  userNotFound: boolean = false;
+  isLoadingUserDetails:boolean=false;
+  isLoadingRepos :boolean=true;
 
   constructor(private apiService: ApiService) {}
 
@@ -30,12 +33,16 @@ export class AppComponent implements OnInit {
       // Reset loading states
       this.isProfileLoaded = false;
       this.isReposLoaded = false;
+      this.userNotFound = false;
+      this.isLoadingUserDetails = true; // New flag for loading user details
 
       // Fetch user details
       this.apiService.getUser(this.username).subscribe({
         next: (userData: any) => {
           this.userDetails = userData;
           this.isProfileLoaded = true;
+          this.isLoadingUserDetails = false; // Update flag when user details are loaded
+
           // Fetch repositories after user details are loaded
           this.fetchRepositories();
         },
@@ -43,28 +50,45 @@ export class AppComponent implements OnInit {
           console.error('Error fetching user details:', error);
           this.isProfileLoaded = false;
           this.isReposLoaded = false;
+          this.userNotFound = true;        
+          this.isLoadingUserDetails = false; // Update flag in case of error
+
+
+
         }
       });
     }
   }
 
-  fetchRepositories() {
-    // Fetch repositories based on username
-    this.apiService.getRepo(this.username, this.currentPage, this.pageSize).subscribe({
-      next: (repoData: any[]) => {
+fetchRepositories() {
+  // Set isLoadingRepos to true before fetching repositories
+  this.isLoadingRepos = true;
+
+  // Fetch repositories based on username
+  this.apiService.getRepo(this.username, this.currentPage, this.pageSize).subscribe({
+    next: (repoData: any[]) => {
+      // Simulate a delay of 1 second (1000 milliseconds)
+      setTimeout(() => {
         console.log(repoData);
         this.userRepos = repoData;
+        // Set isLoadingRepos to false when repositories are loaded
+        this.isLoadingRepos = false;
         this.isReposLoaded = true;
+
         // Calculate pagination info after repositories are loaded
         this.totalPages = Math.ceil(repoData.length / this.pageSize);
         this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-      },
-      error: (error: any) => {
-        console.error('Error fetching repositories:', error);
-        this.isReposLoaded = false;
-      }
-    });
-  }
+      }, 1000); // 1000 milliseconds = 1 second
+    },
+    error: (error: any) => {
+      console.error('Error fetching repositories:', error);
+      this.isReposLoaded = false;
+      // Set isLoadingRepos to false in case of error
+      this.isLoadingRepos = false;
+    }
+  });
+}
+
 
   onPageChange(page: number) {
     this.currentPage = page;
