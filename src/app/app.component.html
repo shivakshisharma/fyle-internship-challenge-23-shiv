@@ -1,5 +1,100 @@
-<div class="grid h-screen place-items-center">
-  <div class="font-bold text-3xl">
-    Fyle Internship Challenge
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+  <!-- Search Bar -->
+  <div *ngIf="!isProfileLoaded" class="mb-6 w-full max-w-xl">
+    <input type="text" placeholder="Enter GitHub username" [(ngModel)]="username" class="w-full p-3 border border-gray-300 rounded-lg">
+    <button (click)="getUserDetails()" class="mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg">Search</button>
   </div>
-</div>
+
+  <!-- Profile Container -->
+  <div *ngIf="isProfileLoaded" class="bg-white border border-black p-6 rounded-lg shadow-lg w-full max-w-4xl">
+    <!-- Skeleton Loader for Profile -->
+    <div *ngIf="!isProfileLoaded" class="animate-pulse">
+      <div class="flex">
+        <div class="flex flex-col items-center mr-6">
+          <div class="w-24 h-24 bg-gray-300 rounded-full"></div>
+          <div class="mt-2 w-32 h-6 bg-gray-300"></div>
+        </div>
+        <div class="flex flex-col justify-center w-full">
+          <div class="w-1/2 h-6 bg-gray-300 mb-4"></div>
+          <div class="w-full h-4 bg-gray-300 mb-2"></div>
+          <div class="w-full h-4 bg-gray-300 mb-2"></div>
+          <div class="w-full h-4 bg-gray-300 mb-2"></div>
+          <div class="w-full h-4 bg-gray-300"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actual Profile Details -->
+    <div *ngIf="isProfileLoaded">
+      <div class="flex">
+        <div class="flex flex-col items-center mr-6">
+          <img [src]="userDetails.avatar_url" alt="User avatar" class="w-24 h-24 rounded-full">
+          <a [href]="userDetails.html_url" target="_blank" class="mt-2 text-blue-500 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mr-1">
+              <path fill-rule="evenodd" d="M19.902 4.098a3.75 3.75 0 0 0-5.304 0l-4.5 4.5a3.75 3.75 0 0 0 1.035 6.037.75.75 0 0 1-.646 1.353 5.25 5.25 0 0 1-1.449-8.45l4.5-4.5a5.25 5.25 0 1 1 7.424 7.424l-1.757 1.757a.75.75 0 1 1-1.06-1.06l1.757-1.757a3.75 3.75 0 0 0 0-5.304Zm-7.389 4.267a.75.75 0 0 1 1-.353 5.25 5.25 0 0 1 1.449 8.45l-4.5 4.5a5.25 5.25 0 1 1-7.424-7.424l1.757-1.757a.75.75 0 1 1 1.06 1.06l-1.757 1.757a3.75 3.75 0 1 0 5.304 5.304l4.5-4.5a3.75 3.75 0 0 0-1.035-6.037.75.75 0 0 1-.354-1Z" clip-rule="evenodd" />
+            </svg>
+            {{ userDetails.html_url }}
+          </a>
+        </div>
+        <div class="flex flex-col justify-center">
+          <h2 class="text-xl font-semibold">{{ userDetails.name }}</h2>
+          <div class="mt-4 space-y-2">
+            <p> {{ userDetails.bio }}</p>
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mr-1">
+                <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
+              </svg>
+              <p class="text-sm">{{ userDetails.location }}</p>
+            </div>
+            
+            <p><small>Twitter:</small>{{ userDetails.twitter }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+     <!-- Zero State -->
+  <div *ngIf="!isProfileLoaded && username.trim() !== ''" class="bg-white border border-black p-6 rounded-lg shadow-lg w-full max-w-4xl">
+    <p class="text-center text-gray-500">User not found.</p>
+  </div>
+
+   <!-- Repositories Section -->
+<div *ngIf="isReposLoaded" class="mt-6">
+  <h3 class="text-lg font-semibold mb-4">User Repositories</h3>
+  <div class="grid grid-cols-2 gap-4">
+    <ng-container *ngFor="let repo of userRepos">
+      <div class="border border-black p-4 rounded-lg">
+        <div>
+          <h4 class="text-md font-semibold">{{ repo.name }}</h4>
+          <p>{{ repo.description }}</p>
+        </div>
+        <div class="mt-2">
+          <div class="flex flex-wrap gap-2 mt-1">
+            <div *ngFor="let topic of repo.topics" class="px-2 py-1 bg-blue-500 text-white rounded">{{ topic }}</div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  
+    <!-- Pagination -->
+    <div class="mt-6 flex items-center justify-between">
+      <!-- Page Size Dropdown -->
+      <div>
+        <label for="pageSize">Page Size:</label>
+        <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+          <option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</option>
+        </select>
+      </div>
+      
+      <!-- Page Numbers -->
+      <div class="flex space-x-2">
+        <button *ngFor="let page of totalPagesArray" 
+                [class.bg-blue-500]="currentPage === page" 
+                [class.text-white]="currentPage === page" 
+                [class.bg-gray-200]="currentPage !== page" 
+                (click)="onPageChange(page)" 
+                class="px-3 py-1 rounded-lg">{{ page }}</button>
+      </div>
+    </div>
+  </div>
+  </div>

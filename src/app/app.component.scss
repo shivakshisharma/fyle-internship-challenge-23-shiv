@@ -1,0 +1,108 @@
+// Import Tailwind CSS
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+// Custom styling
+
+
+/* app.component.scss */
+
+/* Skeleton Loader */
+.animate-pulse {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Search Bar */
+.search-bar {
+  @apply mb-6 w-full max-w-xl;
+}
+
+.search-bar input {
+  @apply w-full p-3 border border-gray-300 rounded-lg;
+}
+
+.search-bar button {
+  @apply mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg;
+}
+
+/* Profile Container */
+.profile-container {
+  @apply bg-white border border-black p-6 rounded-lg shadow-lg w-full max-w-4xl;
+}
+
+/* Profile Header */
+.profile-header {
+  @apply flex;
+}
+
+.avatar-wrapper {
+  @apply flex flex-col items-center mr-6;
+}
+
+.avatar {
+  @apply w-24 h-24 rounded-full;
+}
+
+.avatar-wrapper p {
+  @apply mt-2 text-blue-500;
+}
+
+.user-details {
+  @apply flex flex-col justify-center;
+}
+
+.user-details h2 {
+  @apply text-xl font-semibold;
+}
+
+.profile-info {
+  @apply mt-4 space-y-2;
+}
+
+/* Repositories Section */
+.repo-container {
+  @apply mt-6;
+}
+
+.repo-container h3 {
+  @apply text-lg font-semibold mb-4;
+}
+
+.repo-box {
+  @apply border border-black p-4 rounded-lg;
+}
+
+.repo-details h4 {
+  @apply text-base font-semibold; /* Corrected to text-base */
+}
+
+.topics button {
+  @apply px-2 py-1 bg-gray-200 rounded;
+}
+
+/* Pagination */
+.pagination select {
+  @apply p-2 border border-gray-300 rounded-lg;
+}
+
+.pagination button {
+  @apply px-3 py-1 rounded-lg;
+}
+
+.pagination button.active {
+  @apply bg-blue-500 text-white;
+}
+
+.pagination button:not(.active) {
+  @apply bg-gray-200;
+}
