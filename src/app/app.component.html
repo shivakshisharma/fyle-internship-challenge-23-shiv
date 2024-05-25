@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 shadow-lg">
   <!-- Search Bar -->
   <div *ngIf="!isProfileLoaded" class="mb-6 w-full max-w-xl">
     <input type="text" placeholder="Enter GitHub username" [(ngModel)]="username" class="w-full p-3 border border-gray-300 rounded-lg">
@@ -80,7 +80,7 @@
 
  
 <!-- Repositories Section -->
-<div *ngIf="isReposLoaded" class="mt-6">
+<div *ngIf="isReposLoaded|| isLoadingRepos" class="mt-6">
   <!-- Loading state for repositories -->
   <div *ngIf="isLoadingRepos" class="animate-pulse">
     <div class="grid grid-cols-2 gap-4">
@@ -177,6 +177,7 @@
 
     </button>
   </div>
+</div>
 </div>
 </div>
 </div>

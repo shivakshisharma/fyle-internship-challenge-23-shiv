@@ -12,16 +12,19 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'fyle-frontend-challenge'`, () => {
+  it('should have a default username property', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('fyle-frontend-challenge');
+    expect(app.username).toBeDefined(); // Assuming you have a username property in your component
   });
 
-  it('should render title', () => {
+  it('should render a form with input for username', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('fyle-frontend-challenge app is running!');
+    const form = compiled.querySelector('form');
+    const input = compiled.querySelector('input[type="text"]');
+    expect(form).toBeTruthy();
+    expect(input).toBeTruthy();
   });
 });
