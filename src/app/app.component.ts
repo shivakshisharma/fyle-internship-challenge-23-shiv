@@ -16,8 +16,10 @@ export class AppComponent implements OnInit {
   pageSizeOptions: number[] = [10, 20, 50, 100];
   pageSize: number = 10;
   currentPage: number = 1;
+  totalRepos:number=10;
   totalPages: number = 1;
   totalPagesArray: number[] = [];
+  totalArray:number[]=[];
   userNotFound: boolean = false;
   isLoadingUserDetails:boolean=false;
   isLoadingRepos :boolean=true;
@@ -35,14 +37,16 @@ export class AppComponent implements OnInit {
       this.isReposLoaded = false;
       this.userNotFound = false;
       this.isLoadingUserDetails = true; // New flag for loading user details
-
+      
       // Fetch user details
       this.apiService.getUser(this.username).subscribe({
         next: (userData: any) => {
           this.userDetails = userData;
           this.isProfileLoaded = true;
           this.isLoadingUserDetails = false; // Update flag when user details are loaded
-
+          console.log(this.userDetails)
+          this.totalRepos = this.userDetails.public_repos; // Get the total number of repos from user details
+          this.calculateTotalPages();
           // Fetch repositories after user details are loaded
           this.fetchRepositories();
         },
@@ -59,65 +63,65 @@ export class AppComponent implements OnInit {
       });
     }
   }
+  calculateTotalPages() {
+    this.totalPages = Math.ceil(this.totalRepos / this.pageSize);
+    this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
 
-fetchRepositories() {
-  // Set isLoadingRepos to true before fetching repositories
-  this.isLoadingRepos = true;
-
-  // Fetch repositories based on username
-  this.apiService.getRepo(this.username, this.currentPage, this.pageSize).subscribe({
-    next: (repoData: any[]) => {
-      // Simulate a delay of 1 second (1000 milliseconds)
-      setTimeout(() => {
-        console.log(repoData);
-        this.userRepos = repoData;
-        // Set isLoadingRepos to false when repositories are loaded
+  fetchRepositories() {
+    // Set isLoadingRepos to true before fetching repositories
+    this.isLoadingRepos = true;
+  
+    // Fetch repositories based on username
+    this.apiService.getRepo(this.username, this.currentPage, this.pageSize).subscribe({
+      next: (repoData: any[]) => {
+       
+          this.userRepos = repoData;
+          // Set isLoadingRepos to false when repositories are loaded
+          this.isLoadingRepos = false;
+          this.isReposLoaded = true;
+          // Calculate pagination info after repositories are loaded
+          
+          console.log(this.totalPages);
+      },
+      error: (error: any) => {
+        console.error('Error fetching repositories:', error);
+        this.isReposLoaded = false;
+        // Set isLoadingRepos to false in case of error
         this.isLoadingRepos = false;
-        this.isReposLoaded = true;
+      }
+    });
+  }
+   
 
-        // Calculate pagination info after repositories are loaded
-        this.totalPages = Math.ceil(repoData.length / this.pageSize);
-        this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-      }, 1000); // 1000 milliseconds = 1 second
-    },
-    error: (error: any) => {
-      console.error('Error fetching repositories:', error);
-      this.isReposLoaded = false;
-      // Set isLoadingRepos to false in case of error
-      this.isLoadingRepos = false;
-    }
-  });
-}
 
+
+
+ 
+  onPageSizeChange() {
+    this.currentPage = 1; // Reset to the first page whenever page size changes
+    this.calculateTotalPages();
+    this.fetchRepositories();
+  }
 
   onPageChange(page: number) {
-    this.currentPage = page;
-    // Reload repositories for the selected page
-    this.fetchRepositories();
-  }
-  onPageSizeChange() {
-    this.fetchRepositories();
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.fetchRepositories();
+    }
   }
 
-  onNewerClick() {
-    // Check if the current page is greater than 1
+  onPreviousPage() {
     if (this.currentPage > 1) {
-      // Decrement the current page number
       this.currentPage--;
-      // Load repositories for the new page
-      this.fetchRepositories() ;
-    }
-  }
-  
-  onOlderClick() {
-    // Check if the current page is less than the total number of pages
-    if (this.currentPage < this.totalPagesArray.length) {
-      // Increment the current page number
-      this.currentPage++;
-      // Load repositories for the new page
       this.fetchRepositories();
-        
     }
   }
-  
+
+  onNextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.fetchRepositories();
+    }
+  }
 }

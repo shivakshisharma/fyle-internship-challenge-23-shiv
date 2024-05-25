@@ -102,7 +102,7 @@
       <ng-container *ngFor="let repo of userRepos">
         <div class="border border-black p-4 rounded-lg">
           <div>
-            <h4 class="text-md font-semibold">{{ repo.name }}</h4>
+            <h4 class="text-md font-semibold text-blue-500">{{ repo.name }}</h4>
             <p>{{ repo.description }}</p>
           </div>
           <div class="mt-2">
@@ -114,25 +114,69 @@
       </ng-container>
     </div>
   
-    <!-- Pagination -->
-    <div class="mt-6 flex items-center justify-between">
-      <!-- Page Size Dropdown -->
-      <div>
-        <label for="pageSize">Page Size:</label>
-        <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
-          <option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</option>
-        </select>
-      </div>
-      
-      <!-- Page Numbers -->
-      <div class="flex space-x-2">
-        <button *ngFor="let page of totalPagesArray" 
-                [class.bg-blue-500]="currentPage === page" 
-                [class.text-white]="currentPage === page" 
-                [class.bg-gray-200]="currentPage !== page" 
-                (click)="onPageChange(page)" 
-                class="px-3 py-1 rounded-lg">{{ page }}</button>
-      </div>
-    </div>
+   <!-- Pagination -->
+<div class="mt-6 flex items-center justify-between">
+  <!-- Page Size Dropdown -->
+  <div>
+    <label for="pageSize">Page Size:</label>
+    <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+      <option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</option>
+    </select>
   </div>
+
+  <!-- Page Numbers -->
+  <div class="flex space-x-2">
+    <!-- Previous Page Button -->
+    <button 
+      (click)="onPreviousPage()" 
+      [disabled]="currentPage === 1" 
+      class="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300"
+    >
+      &laquo;
+    </button>
+
+    <!-- Page Number Buttons -->
+    <button 
+      *ngFor="let page of totalPagesArray" 
+      (click)="onPageChange(page)" 
+      [class.bg-blue-500]="currentPage === page" 
+      [class.text-white]="currentPage === page" 
+      [class.bg-gray-200]="currentPage !== page" 
+      class="px-3 py-1 rounded-lg"
+    >
+      {{ page }}
+    </button>
+
+    <!-- Next Page Button -->
+    <button 
+      (click)="onNextPage()" 
+      [disabled]="currentPage === totalPages" 
+      class="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300"
+    >
+      &raquo;
+    </button>
+  </div>
+  <div class="flex space-x-2">
+    <!-- Previous Page Button -->
+    <button 
+      (click)="onPreviousPage()" 
+      [disabled]="currentPage === 1" 
+      class="flex items-center px-4 py-1 rounded-lg bg-gray-200 hover:bg-gray-300"
+    >
+      <div class="arrow-2"></div>Older
+    </button>
+
+  
+    <!-- Next Page Button -->
+    <button 
+      (click)="onNextPage()" 
+      [disabled]="currentPage === totalPages" 
+      class="flex items-center px-4 py-1 rounded-lg bg-gray-200 hover:bg-gray-300"
+    >
+      Newer<div class="arrow-1"></div>
+
+    </button>
+  </div>
+</div>
+</div>
 </div>
