@@ -15,7 +15,7 @@ describe('AppComponent', () => {
   it('should have a default username property', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.username).toBeDefined(); // Assuming you have a username property in your component
+    expect(app.username).toBeDefined(); 
   });
 
   it('should render a form with input for username', () => {

@@ -18,7 +18,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/fyle-frontend-challenge",
+            "outputPath": "dist/fyle-internship-challenge-23-shiv",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -40,20 +40,26 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "12kb",
+                  "maximumError": "14kb"
                 }
               ],
               "outputHashing": "all"
             },
             "development": {
               "buildOptimizer": false,
-              "optimization": false,
+              "optimization": { 
+                "scripts": true, 
+                "styles": { 
+                 "minify": true, 
+                 "inlineCritical": false 
+                }
+               },
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
@@ -66,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "fyle-frontend-challenge:build:production"
+              "browserTarget": "fyle-internship-challenge-23-shiv:build:production"
             },
             "development": {
-              "browserTarget": "fyle-frontend-challenge:build:development"
+              "browserTarget": "fyle-internship-challenge-23-shiv:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -77,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fyle-frontend-challenge:build"
+            "browserTarget": "fyle-internship-challenge-23-shiv:build"
           }
         },
         "test": {
